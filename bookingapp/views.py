@@ -1,18 +1,11 @@
-from django.shortcuts import render
 from rest_framework import generics, status
-# Create your views here.
 from rest_framework.views import APIView
-
 from .models import Room, Reservation
-from .serializers import RoomSerializer, RoomBookingSerializer, RoomDetailSerializer, LoginSerializer
+from .serializers import RoomSerializer, RoomBookingSerializer, RoomDetailSerializer
 from django.shortcuts import get_object_or_404
-
-
-
-from rest_framework import generics
+from .serializers import UserSerializer
+from django.contrib.auth.models import User
 from rest_framework.response import Response
-from .models import Room
-from .serializers import RoomSerializer
 from django.utils import timezone
 
 
@@ -51,7 +44,7 @@ class RoomBookingAPIView(APIView):
                     # Create a new reservation
                     reservation = Reservation.objects.create(
                         room=room,
-                        user=request.user, # Assuming the Client is associated with the User
+                        user=request.user,
                         check_in_date=start,
                         check_out_date=end
                     )
@@ -80,8 +73,7 @@ class RoomDetailView(generics.RetrieveAPIView):
     serializer_class = RoomDetailSerializer
     lookup_field = 'room_number'
 
-from .serializers import UserSerializer
-from django.contrib.auth.models import User
+
 class UserRegistrationView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
